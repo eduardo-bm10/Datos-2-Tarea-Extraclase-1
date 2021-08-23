@@ -7,7 +7,13 @@
 
 
 class PagedArray {
+public:
+    int numberOfPages;
+    const int PAGE_SIZE = 256;
+    int page_array[PAGE_SIZE];
 
+    int insertion_sort();
+    void operator[](int getPage);
 };
 
 
