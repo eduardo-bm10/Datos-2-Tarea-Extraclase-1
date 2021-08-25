@@ -10,37 +10,56 @@ using namespace std;
 using namespace PagedArray;
 
 /**
+ * Main function executes the program and loads .CSV file
+ * It is executed from command line
+ *
+ * @param argc is number of parameters given from command line.
+ * @param argv is array of parameters given from command line.
+ * @return 0
+ */
+int PagedArray::main(int argc, char **argv) {
+    int pageCounter = 0, numberCounter, number = 0;
+    fstream file;
+    file.open(argv[0]);
+    while (pageCounter < 6) {
+        numberCounter = 0;
+        while (numberCounter < 256) {
+            file >> number;
+            PagedArray::*ptr = number;
+            numberCounter++;
+        }
+        pageCounter++;
+    }
+    file.close();
+    return 0;
+}
+
+/**
  * Metodo file_loader para cargar el archivo .CSV
  * @param directory es la ruta del archivo
  * @return el array que contiene las primeras seis paginas del archivo.
  */
-int PagedArray::file_loader(std::string filename) {
+void PagedArray::file_writer(std::string filename, int fixedArray[]) {
     fstream file;
     file.open(filename);
-    int counter = 0;
-    int number = 0;
-    while (pages > counter && counter < 6) {
-        file >> number;
-        PagedArray::ptr + counter = number;
-        counter++;
+    for (int i = 0; i < 256; i++) {
+        file << fixedArray[i];
     }
     file.close();
-    return *ptr;
 }
-
 /**
- * Sobrecarga del operador [].
- * Recibe el indice de la pagina que se desea cargar a memoria.
- * @param index
+ * Operator [] overload.
+ * It is modified to load a specific page given by index
+ * @param index is the number of page to load.
  */
 void PagedArray::operator[](int index) {
-    for (int i = 0; i < pages; i++) {
-        for (int k = 0; k < 6; k++) {
-            if (array[index] == ptr+k) {
-                cout << "The page is already in memory.";
+    for (int t = 0; t < pages; t++) {
+        for (int f = 0; f < 6; f++) {
+            if (referenceString[i] == frames[f]) {
+                cout << "Page is already in memory."
             }
-            else {
-                replacement(index);
+            else if (referenceString[t] == index) {
+                fifo_replacement(index);
                 break;
             }
         }
@@ -50,24 +69,31 @@ void PagedArray::operator[](int index) {
  * Metodo replacement.
  * Aplica el algoritmo FIFO para reemplazar una pagina, ya cargada en memoria, por la nueva pagina especificada.
  *
- * Investigado de https://www.geeksforgeeks.org/page-replacement-algorithms-in-operating-systems/#:~:text=First%20In%20First%20Out%20(FIFO,queue%20is%20selected%20for%20removal.
+ * Investigado de https://prepinsta.com/operating-systems/page-replacement-algorithms/fifo/fifo-in-c/
  */
-void PagedArray::replacement(int index) {
-    int referenceString[10];
-    int frames = 6;
-    int pageFaults = 0;
-    for (int i = 0; i < pages; i++) {
-        for (int j = 0; j < frames; j++) {
-            if (referenceString[i] == array[j] && index == i) {
-                cout << "HIT";
-            }
-            else {
-                cout << "MISS";
-                array[j] = referenceString[index];
-                pageFaults++;
+void PagedArray::fifo_replacement(int index) {
+    int pageFaults = 0, m, n, s, frames = 6;
+    int temp[frames];
+    for (m = 0; m < frames; m++) {
+        temp[m] = -1;
+    }
+    for (m = 0; m < pages; m++) {
+        s = 0;
+        for (n = 0; n < frames; n++) {
+            if (referenceString[m] == temp[n]) {
+                s++;
+                pageFaults--;
             }
         }
+        pageFaults++;
+        if (pageFaults <= frames && s == 0) {
+            temp[m] = referenceString[m];
+        }
+        else if (s == 0) {
+            temp[(pageFaults - 1) % frames] = referenceString[m];
+        }
     }
+    printf("Total number of page faults: %d\t", pageFaults);
 }
 
 /**
@@ -75,13 +101,8 @@ void PagedArray::replacement(int index) {
  * @param array
  */
 void PagedArray::insertion_sort(int array[]) {
-    for (int i = 1; i < PAGE_SIZE*6; i++) {
-        int temp = array[i];
-        int j = i - 1;
-        while (j >= 0 && temp <= array[j]) {
-            array[j+1] = array[j];
-            j--;
+    int
+
         }
-        array[j+1] = temp;
     }
 }
