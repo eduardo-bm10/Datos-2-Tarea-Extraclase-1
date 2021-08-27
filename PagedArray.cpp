@@ -31,7 +31,7 @@ int PagedArray::main(int argc, char **argv) {
             *(ptr1 + numberCounter) = number;///Insert number in temporal array.
             numberCounter++;
         }
-        pageFrames[pageCounter] = pageCounter;
+        pageFrames[pageCounter] = pageCounter + 1;
         insertion_sort(ptr1);///Sort array located in memory block;
         pageCounter++;
         for (int number : temp) {
@@ -49,16 +49,15 @@ int PagedArray::main(int argc, char **argv) {
  * It is modified to load a specific page given by index
  * @param page is the number of page to load.
  */
-int& PagedArray::operator[](int page) {
-    for (int i = 0; i < pageFrames; i++) {
-        if (frames[i] == page) {
+void PagedArray::operator[](int page) {
+    for (int i = 0; i < 6; i++) {
+        if (pageFrames[i] == page) {
             cout << "Page is loaded.";
         }
         else if (page == referenceString[i] && page != pageFrames[i]) {
             fifo_replacement(page);
         }
     }
-    return &page;
 }
 /**
  * Metodo replacement.
