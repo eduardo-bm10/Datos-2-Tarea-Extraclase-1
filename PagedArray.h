@@ -16,7 +16,7 @@ public:
 
     int main(int argc, char** argv);
     void insertion_sort(int* arrayPointer);
-    int& operator[](int page);
+    void operator[](int page);
     void fifo_replacement(int index);
 };
 
