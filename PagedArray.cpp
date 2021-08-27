@@ -26,17 +26,20 @@ int PagedArray::main(int argc, char **argv) {
     while (pageCounter < 6) {
         int* ptr1 = temp;///Allocating 1 KB of memory for page
         numberCounter = 0;
-        while (numberCounter < 256) {
+        while (!(file1.eof()) && numberCounter < 256) {
             file1 >> number;///Read numbers from File #1.
             *(ptr1 + numberCounter) = number;///Insert number in temporal array.
             numberCounter++;
         }
+        frames[pageCounter] = pageCounter;
         insertion_sort(ptr1);///Sort array located in memory block;
         pageCounter++;
         for (int number : temp) {
-            file2 << number;///Write ordered numbers in File #2.
+            file2 << number;///Write sorted numbers in File #2.
         }
         free(ptr1);///Freeing the memory allocated before.
+        ptr1 = load[pageCounter];
+
     }
     file1.close();
     file2.close();
@@ -46,24 +49,18 @@ int PagedArray::main(int argc, char **argv) {
 /**
  * Operator [] overload.
  * It is modified to load a specific page given by index
- * @param index is the number of page to load.
+ * @param page is the number of page to load.
  */
-void PagedArray::operator[](string filename, int page) {
-    int pages = 0, n = 0, number = 0, i = 0;
-    int tmp[256];
-    fstream file;
-    file.open(filename);
-    while (!(file.eof())) {
-        if (++n == 256) {
-            pages++;
+int& PagedArray::operator[](int page) {
+    for (int i = 0; i < frames; i++) {
+        if (frames[i] == page) {
+            cout << "Page is loaded.";
+        }
+        else if (page == referenceString[i] && page != frames[i]) {
+            fifo_replacement(page);
         }
     }
-    while (i < 256) {
-        file >> number;
-
-    }
-    fifo_replacement(page);
-
+    return
 }
 /**
  * Metodo replacement.
@@ -72,7 +69,7 @@ void PagedArray::operator[](string filename, int page) {
  * Investigado de https://prepinsta.com/operating-systems/page-replacement-algorithms/fifo/fifo-in-c/
  */
 void PagedArray::fifo_replacement(int index) {
-    int pageFaults = 0, m, n, s, frames = 6;
+    int pageFaults = 0, m, n, s;
     int temp[frames];
     for (m = 0; m < frames; m++) {
         temp[m] = -1;
@@ -97,8 +94,8 @@ void PagedArray::fifo_replacement(int index) {
 }
 
 /**
- *
- * @param arrayPointer
+ * Insertion Sort: sorts the array given by specified pointer.
+ * @param arrayPointer is the pointer to the array.
  */
 void PagedArray::insertion_sort(int* arrayPointer) {
     int temp, c;
