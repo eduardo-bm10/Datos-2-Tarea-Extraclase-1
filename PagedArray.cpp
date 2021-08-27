@@ -5,9 +5,9 @@
 #include "PagedArray.h"
 #include "iostream"
 #include "fstream"
+#include "string"
 
 using namespace std;
-using namespace PagedArray;
 
 /**
  * Main function executes the program and loads .CSV file
@@ -19,51 +19,51 @@ using namespace PagedArray;
  */
 int PagedArray::main(int argc, char **argv) {
     int pageCounter = 0, numberCounter, number = 0;
-    fstream file;
-    file.open(argv[0]);
+    int temp[256];
+    fstream file1, file2;
+    file1.open(argv[0]);
+    file2.open(argv[1]);
     while (pageCounter < 6) {
+        int* ptr1 = temp;///Allocating 1 KB of memory for page
         numberCounter = 0;
         while (numberCounter < 256) {
-            file >> number;
-            PagedArray::*ptr = number;
+            file1 >> number;///Read numbers from File #1.
+            *(ptr1 + numberCounter) = number;///Insert number in temporal array.
             numberCounter++;
         }
+        insertion_sort(ptr1);///Sort array located in memory block;
         pageCounter++;
+        for (int number : temp) {
+            file2 << number;///Write ordered numbers in File #2.
+        }
+        free(ptr1);///Freeing the memory allocated before.
     }
-    file.close();
+    file1.close();
+    file2.close();
     return 0;
 }
 
-/**
- * Metodo file_loader para cargar el archivo .CSV
- * @param directory es la ruta del archivo
- * @return el array que contiene las primeras seis paginas del archivo.
- */
-void PagedArray::file_writer(std::string filename, int fixedArray[]) {
-    fstream file;
-    file.open(filename);
-    for (int i = 0; i < 256; i++) {
-        file << fixedArray[i];
-    }
-    file.close();
-}
 /**
  * Operator [] overload.
  * It is modified to load a specific page given by index
  * @param index is the number of page to load.
  */
-void PagedArray::operator[](int index) {
-    for (int t = 0; t < pages; t++) {
-        for (int f = 0; f < 6; f++) {
-            if (referenceString[i] == frames[f]) {
-                cout << "Page is already in memory."
-            }
-            else if (referenceString[t] == index) {
-                fifo_replacement(index);
-                break;
-            }
+void PagedArray::operator[](string filename, int page) {
+    int pages = 0, n = 0, number = 0, i = 0;
+    int tmp[256];
+    fstream file;
+    file.open(filename);
+    while (!(file.eof())) {
+        if (++n == 256) {
+            pages++;
         }
     }
+    while (i < 256) {
+        file >> number;
+
+    }
+    fifo_replacement(page);
+
 }
 /**
  * Metodo replacement.
@@ -77,7 +77,7 @@ void PagedArray::fifo_replacement(int index) {
     for (m = 0; m < frames; m++) {
         temp[m] = -1;
     }
-    for (m = 0; m < pages; m++) {
+    for (m = 0; m < 10; m++) {
         s = 0;
         for (n = 0; n < frames; n++) {
             if (referenceString[m] == temp[n]) {
@@ -98,11 +98,19 @@ void PagedArray::fifo_replacement(int index) {
 
 /**
  *
- * @param array
+ * @param arrayPointer
  */
-void PagedArray::insertion_sort(int array[]) {
-    int
-
+void PagedArray::insertion_sort(int* arrayPointer) {
+    int temp, c;
+    for (int i = 1; i < 256; i++) {
+        if (arrayPointer[i-1] > arrayPointer[i]) {
+            c = i - 1;
+            while (arrayPointer[c] > arrayPointer[c+1] && c >= 0) {
+                temp = arrayPointer[c];
+                arrayPointer[c] = arrayPointer[c+1];
+                arrayPointer[c+1] = temp;
+                c--;
+            }
         }
     }
 }
