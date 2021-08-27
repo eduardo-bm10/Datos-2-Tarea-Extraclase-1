@@ -15,7 +15,7 @@ public:
     int referenceString[10] = {1,2,3,4,5,6,7,8,9,10};
 
     int main(int argc, char** argv);
-    int insertion_sort(int array[]);
+    void insertion_sort(int* arrayPointer);
     int& operator[](int page);
     void fifo_replacement(int index);
 };
