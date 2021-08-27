@@ -11,12 +11,12 @@
  */
 class PagedArray {
 public:
-    int frames[6];
+    int pageFrames[6];
     int referenceString[10] = {1,2,3,4,5,6,7,8,9,10};
 
     int main(int argc, char** argv);
     int insertion_sort(int array[]);
-    PagedArray operator[](const int& page);
+    int& operator[](int page);
     void fifo_replacement(int index);
 };
 

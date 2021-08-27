@@ -38,8 +38,6 @@ int PagedArray::main(int argc, char **argv) {
             file2 << number;///Write sorted numbers in File #2.
         }
         free(ptr1);///Freeing the memory allocated before.
-        ptr1 = load[pageCounter];
-
     }
     file1.close();
     file2.close();
@@ -69,25 +67,24 @@ int& PagedArray::operator[](int page) {
  * Investigado de https://prepinsta.com/operating-systems/page-replacement-algorithms/fifo/fifo-in-c/
  */
 void PagedArray::fifo_replacement(int index) {
-    int pageFaults = 0, m, n, s;
-    int temp[frames];
+    int pageFaults = 0, m, n, s, frames = 6;
     for (m = 0; m < frames; m++) {
-        temp[m] = -1;
+        pageFrames[m] = -1;
     }
     for (m = 0; m < 10; m++) {
         s = 0;
         for (n = 0; n < frames; n++) {
-            if (referenceString[m] == temp[n]) {
+            if (index == referenceString[m] && referenceString[m] == pageFrames[n]) {
                 s++;
                 pageFaults--;
             }
         }
         pageFaults++;
         if (pageFaults <= frames && s == 0) {
-            temp[m] = referenceString[m];
+            pageFrames[m] = index;
         }
         else if (s == 0) {
-            temp[(pageFaults - 1) % frames] = referenceString[m];
+            pageFrames[(pageFaults - 1) % frames] = index;
         }
     }
     printf("Total number of page faults: %d\t", pageFaults);
