@@ -17,7 +17,7 @@ using namespace std;
  * @param argv is array of parameters given from command line.
  * @return 0
  */
-int PagedArray::main(int argc, char **argv) {
+void PagedArray::start(char **argv) {
     int pageCounter = 0, numberCounter, number = 0;
     int temp[256];
     fstream file1, file2;
@@ -41,7 +41,6 @@ int PagedArray::main(int argc, char **argv) {
     }
     file1.close();
     file2.close();
-    return 0;
 }
 
 /**
