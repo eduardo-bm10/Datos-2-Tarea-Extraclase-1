@@ -6,7 +6,7 @@
 
 int main(int argc, char **argv) {
     PagedArray* function = new PagedArray();
-    function.start(argv);
+    function->start(argv);
     delete function;
     return 0;
 }
