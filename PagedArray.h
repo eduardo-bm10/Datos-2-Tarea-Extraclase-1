@@ -20,5 +20,4 @@ public:
     void fifo_replacement(int index);
 };
 
-
 #endif //DATOS_2_TAREA_EXTRACLASE_1_PAGEDARRAY_H
